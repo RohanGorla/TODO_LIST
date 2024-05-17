@@ -12,23 +12,23 @@ const PORT = process.env.PORT || 8080;
 
 /* THIS IS FOR PRODUCTION PURPOSE */
 
-// const db = mysql.createConnection({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_NAME,
-//   port: process.env.DB_PORT,
-// });
+const db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
+});
 
 /* THIS IS FOR DEVELOPMENT PURPOSE */
 
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "r0hanr0n",
-  database: "serverone",
-  port: 3306,
-});
+// const db = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "r0hanr0n",
+//   database: "serverone",
+//   port: 3306,
+// });
 
 db.connect((err) => {
   if (err) {
