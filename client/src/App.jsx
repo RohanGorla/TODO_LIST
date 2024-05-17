@@ -12,6 +12,8 @@ function App() {
   useEffect(() => {
     async function getTodos() {
       let url = import.meta.env.VITE_BASE_URL + '/';
+      console.log(import.meta.env.VITE_BASE_URL);
+      console.log(url);
       await axios
         .get(url)
         .then((response) => {
