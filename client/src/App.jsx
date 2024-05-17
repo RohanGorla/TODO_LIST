@@ -3,9 +3,9 @@ import "./App.css";
 import axios from "axios";
 
 function App() {
-  const [render, setRender] = useState(false);
+  const [renderAdd, setRenderAdd] = useState(false);
+  const [done, setDone] = useState(false);
   const [todos, setTodos] = useState([]);
-  const [done, setDone] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -15,23 +15,36 @@ function App() {
         .get("https://todo-server-phi-teal.vercel.app/")
         .then((response) => {
           console.log(response.data);
+          response.data.forEach((td) => {
+            if (td.done == "yes") {
+              setDone(true);
+            } else{
+              setDone(false);
+            }
+          });
           setTodos(response.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      await axios
-        .get("https://todo-server-phi-teal.vercel.app/done")
-        .then((response) => {
-          console.log(response.data);
-          setDone(response.data);
         })
         .catch((err) => {
           console.log(err);
         });
     }
     getTodos();
-  }, [render]);
+  }, [renderAdd]);
+
+  // useEffect(() => {
+  //   async function getTodos() {
+  //     await axios
+  //       .get("https://todo-server-phi-teal.vercel.app/done")
+  //       .then((response) => {
+  //         console.log(response.data);
+  //         setDone(response.data);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  //   getTodos();
+  // }, [renderDone]);
 
   async function addTodo(e) {
     e.preventDefault();
@@ -48,7 +61,7 @@ function App() {
       });
     setTitle("");
     setContent("");
-    setRender(!render);
+    setRenderAdd(!renderAdd);
   }
 
   async function finishTodo(id) {
@@ -62,7 +75,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-    setRender(!render);
+    setRenderAdd(!renderAdd);
   }
 
   async function undoTodo(id) {
@@ -74,19 +87,21 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-    setRender(!render);
+    setRenderAdd(!renderAdd);
   }
 
   async function deleteTodo(id) {
     await axios
-      .delete("https://todo-server-phi-teal.vercel.app/delete", { data: { id } })
+      .delete("https://todo-server-phi-teal.vercel.app/delete", {
+        data: { id },
+      })
       .then((res) => {
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
-    setRender(!render);
+    setRenderAdd(!renderAdd);
   }
 
   return (
@@ -118,7 +133,7 @@ function App() {
       <h2>{todos.length ? "TODOS:" : "YOU HAVE NOTHING-TODO"}</h2>
       <div className="todos">
         {todos.map((todo) => {
-          return (
+          return todo.done == "no" ? (
             <div className="todo-item" key={todo.id}>
               <h3>{todo.title}</h3>
               <p>{todo.content}</p>
@@ -137,12 +152,14 @@ function App() {
                 Delete
               </button>
             </div>
+          ) : (
+            <></>
           );
         })}
-        <h2>{done.length ? "FINISHED TODOS:" : null}</h2>
+        <h2>{done ? "FINISHED TODOS:" : null}</h2>
         <div className="finished">
-          {done.map((todo) => {
-            return (
+          {todos.map((todo) => {
+            return todo.done == "yes" ? (
               <div key={todo.id}>
                 <h3>{todo.title}</h3>
                 <p>{todo.content}</p>
@@ -161,6 +178,8 @@ function App() {
                   Delete
                 </button>
               </div>
+            ) : (
+              <></>
             );
           })}
         </div>

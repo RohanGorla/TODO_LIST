@@ -39,7 +39,7 @@ db.connect((err) => {
 });
 
 app.get("/", (req, res) => {
-  db.query('select * from todos where done = "no"', (err, data) => {
+  db.query('select * from todos', (err, data) => {
     if (err) return res.send(err);
     return res.send(data);
   });
