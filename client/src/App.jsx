@@ -12,8 +12,7 @@ function App() {
   useEffect(() => {
     async function getTodos() {
       await axios
-        // .get("https://todo-server-phi-teal.vercel.app/")
-        .get("http://localhost:3000/")
+        .get(`${import.meta.env.VITE_BASE_URL}/`)
         .then((response) => {
           let todos = [];
           response.data.forEach((todo) => {
@@ -40,10 +39,13 @@ function App() {
   async function addTodo(e) {
     e.preventDefault();
     await axios
-      .post("http://localhost:3000/add", {
-        todo_title: title,
-        todo_content: content,
-      })
+      .post(
+        `${import.meta.env.VITE_BASE_URL}/add`,
+        {
+          todo_title: title,
+          todo_content: content,
+        }
+      )
       .then((res) => {
         console.log(res);
       })
@@ -55,23 +57,12 @@ function App() {
     setRenderAdd(!renderAdd);
   }
 
-  async function finishTodo(id) {
+  async function toggleTodo(id, done) {
     await axios
-      .post("http://localhost:3000/done", {
-        todo_id: id,
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    setRenderAdd(!renderAdd);
-  }
-
-  async function undoTodo(id) {
-    await axios
-      .post("http://localhost:3000/undo", { todo_id: id })
+      .post(
+        `${import.meta.env.VITE_BASE_URL}/toggle`,
+        { todo_id: id, todo_done: done }
+      )
       .then((res) => {
         console.log(res);
       })
@@ -83,9 +74,12 @@ function App() {
 
   async function deleteTodo(id) {
     await axios
-      .delete("http://localhost:3000/delete", {
-        data: { id },
-      })
+      .delete(
+        `${import.meta.env.VITE_BASE_URL}/delete`,
+        {
+          data: { id },
+        }
+      )
       .then((res) => {
         console.log(res);
       })
@@ -130,7 +124,7 @@ function App() {
               <p>{todo.content}</p>
               <button
                 onClick={() => {
-                  finishTodo(todo.id);
+                  toggleTodo(todo.id, todo.done == "yes" ? "no" : "yes");
                 }}
               >
                 Done
@@ -156,7 +150,7 @@ function App() {
                 <p>{todo.content}</p>
                 <button
                   onClick={() => {
-                    undoTodo(todo.id);
+                    toggleTodo(todo.id, todo.done == "yes" ? "no" : "yes");
                   }}
                 >
                   Undo
