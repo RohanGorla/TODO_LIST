@@ -11,7 +11,7 @@ function App() {
 
   useEffect(() => {
     async function getTodos() {
-      let url = import.meta.env.VITE_BASE_URL + '/';
+      let url = import.meta.env.VITE_BASE_URL + "/";
       console.log(import.meta.env.VITE_BASE_URL);
       console.log(url);
       await axios
@@ -41,7 +41,8 @@ function App() {
 
   async function addTodo(e) {
     e.preventDefault();
-    let url = import.meta.env.VITE_BASE_URL + '/add';
+    let url = import.meta.env.VITE_BASE_URL + "/add";
+    console.log(url);
     await axios
       .post(url, {
         todo_title: title,
@@ -59,7 +60,8 @@ function App() {
   }
 
   async function toggleTodo(id, done) {
-    let url = import.meta.env.VITE_BASE_URL + '/toggle';
+    let url = import.meta.env.VITE_BASE_URL + "/toggle";
+    console.log(url);
     await axios
       .post(url, {
         todo_id: id,
@@ -75,7 +77,8 @@ function App() {
   }
 
   async function deleteTodo(id) {
-    let url = import.meta.env.VITE_BASE_URL + '/delete';
+    let url = import.meta.env.VITE_BASE_URL + "/delete";
+    console.log(url);
     await axios
       .delete(url, {
         data: { id },
