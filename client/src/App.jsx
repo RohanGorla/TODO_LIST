@@ -4,8 +4,7 @@ import axios from "axios";
 
 function App() {
   const [renderAdd, setRenderAdd] = useState(false);
-  const [done, setDone] = useState(false);
-  const [none, setNone] = useState(false);
+  const [done, setDone] = useState([]);
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -13,22 +12,23 @@ function App() {
   useEffect(() => {
     async function getTodos() {
       await axios
-        .get("https://todo-server-phi-teal.vercel.app/")
+        // .get("https://todo-server-phi-teal.vercel.app/")
+        .get("http://localhost:3000/")
         .then((response) => {
-          console.log(response.data);
-          response.data.forEach((td) => {
-            if (td.done == "no") {
-              setDone(true);
-            } else{
-              setDone(false);
-            }
-            if (td.done == 'no') {
-              setNone(false);
-            } else {
-              setNone(true);
+          let todos = [];
+          response.data.forEach((todo) => {
+            if (todo.done == "no") {
+              todos.push(todo);
             }
           });
-          setTodos(response.data);
+          let dones = [];
+          response.data.forEach((todo) => {
+            if (todo.done == "yes") {
+              dones.push(todo);
+            }
+          });
+          setDone(dones);
+          setTodos(todos);
         })
         .catch((err) => {
           console.log(err);
@@ -37,25 +37,10 @@ function App() {
     getTodos();
   }, [renderAdd]);
 
-  // useEffect(() => {
-  //   async function getTodos() {
-  //     await axios
-  //       .get("https://todo-server-phi-teal.vercel.app/done")
-  //       .then((response) => {
-  //         console.log(response.data);
-  //         setDone(response.data);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  //   getTodos();
-  // }, [renderDone]);
-
   async function addTodo(e) {
     e.preventDefault();
     await axios
-      .post("https://todo-server-phi-teal.vercel.app/add", {
+      .post("http://localhost:3000/add", {
         todo_title: title,
         todo_content: content,
       })
@@ -72,7 +57,7 @@ function App() {
 
   async function finishTodo(id) {
     await axios
-      .post("https://todo-server-phi-teal.vercel.app/done", {
+      .post("http://localhost:3000/done", {
         todo_id: id,
       })
       .then((res) => {
@@ -86,7 +71,7 @@ function App() {
 
   async function undoTodo(id) {
     await axios
-      .post("https://todo-server-phi-teal.vercel.app/undo", { todo_id: id })
+      .post("http://localhost:3000/undo", { todo_id: id })
       .then((res) => {
         console.log(res);
       })
@@ -98,7 +83,7 @@ function App() {
 
   async function deleteTodo(id) {
     await axios
-      .delete("https://todo-server-phi-teal.vercel.app/delete", {
+      .delete("http://localhost:3000/delete", {
         data: { id },
       })
       .then((res) => {
@@ -136,10 +121,10 @@ function App() {
         ></input>
         <button type="submit">ADD</button>
       </form>
-      <h2>{none ? "TODOS:" : "YOU HAVE NOTHING-TODO"}</h2>
+      <h2>{todos.length ? "TODOS:" : "YOU HAVE NOTHING-TODO"}</h2>
       <div className="todos">
         {todos.map((todo) => {
-          return todo.done == "no" ? (
+          return (
             <div className="todo-item" key={todo.id}>
               <h3>{todo.title}</h3>
               <p>{todo.content}</p>
@@ -158,14 +143,14 @@ function App() {
                 Delete
               </button>
             </div>
-          ) : (
-            <></>
           );
         })}
-        <h2>{done ? "FINISHED TODOS:" : null}</h2>
+        <h2>{done.length ? "FINISHED TODOS:" : null}</h2>
         <div className="finished">
-          {todos.map((todo) => {
-            return todo.done == "yes" ? (
+          {done.map((todo) => {
+            console.log(done);
+            console.log(todo);
+            return (
               <div key={todo.id}>
                 <h3>{todo.title}</h3>
                 <p>{todo.content}</p>
@@ -184,8 +169,6 @@ function App() {
                   Delete
                 </button>
               </div>
-            ) : (
-              <></>
             );
           })}
         </div>
