@@ -59,6 +59,11 @@ app.post('/add', (req, res)=>{
     res.send("data inserted");
 });
 
+app.post('/toggle', (req, res)=>{
+  db.query("update todos set ? where id = ?", [{done: req.body.todo_done}, req.body.todo_id]);
+  res.send("update done");
+});
+
 app.post('/done', (req, res)=>{
     db.query("update todos set done = 'yes' WHERE id = ?", [req.body.todo_id]);
     res.send("Update done");
