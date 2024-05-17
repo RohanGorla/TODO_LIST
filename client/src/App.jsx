@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     async function getTodos() {
       await axios
-        .get("http://localhost:3000/")
+        .get("https://todo-server-phi-teal.vercel.app/")
         .then((response) => {
           console.log(response.data);
           setTodos(response.data);
@@ -21,7 +21,7 @@ function App() {
           console.log(err);
         });
       await axios
-        .get("http://localhost:3000/done")
+        .get("https://todo-server-phi-teal.vercel.app/done")
         .then((response) => {
           console.log(response.data);
           setDone(response.data);
@@ -36,7 +36,7 @@ function App() {
   async function addTodo(e) {
     e.preventDefault();
     await axios
-      .post("http://localhost:3000/add", {
+      .post("https://todo-server-phi-teal.vercel.app/add", {
         todo_title: title,
         todo_content: content,
       })
@@ -53,7 +53,7 @@ function App() {
 
   async function finishTodo(id) {
     await axios
-      .post("http://localhost:3000/done", {
+      .post("https://todo-server-phi-teal.vercel.app/done", {
         todo_id: id,
       })
       .then((res) => {
@@ -67,7 +67,7 @@ function App() {
 
   async function undoTodo(id) {
     await axios
-      .post("http://localhost:3000/undo", { todo_id: id })
+      .post("https://todo-server-phi-teal.vercel.app/undo", { todo_id: id })
       .then((res) => {
         console.log(res);
       })
@@ -79,7 +79,7 @@ function App() {
 
   async function deleteTodo(id) {
     await axios
-      .delete("http://localhost:3000/delete", { data: { id } })
+      .delete("https://todo-server-phi-teal.vercel.app/delete", { data: { id } })
       .then((res) => {
         console.log(res);
       })
