@@ -39,13 +39,10 @@ function App() {
   async function addTodo(e) {
     e.preventDefault();
     await axios
-      .post(
-        `${import.meta.env.VITE_BASE_URL}/add`,
-        {
-          todo_title: title,
-          todo_content: content,
-        }
-      )
+      .post(`${import.meta.env.VITE_BASE_URL}/add`, {
+        todo_title: title,
+        todo_content: content,
+      })
       .then((res) => {
         console.log(res);
       })
@@ -59,10 +56,10 @@ function App() {
 
   async function toggleTodo(id, done) {
     await axios
-      .post(
-        `${import.meta.env.VITE_BASE_URL}/toggle`,
-        { todo_id: id, todo_done: done }
-      )
+      .post(`${import.meta.env.VITE_BASE_URL}/toggle`, {
+        todo_id: id,
+        todo_done: done,
+      })
       .then((res) => {
         console.log(res);
       })
@@ -74,12 +71,9 @@ function App() {
 
   async function deleteTodo(id) {
     await axios
-      .delete(
-        `${import.meta.env.VITE_BASE_URL}/delete`,
-        {
-          data: { id },
-        }
-      )
+      .delete(`${import.meta.env.VITE_BASE_URL}/delete`, {
+        data: { id },
+      })
       .then((res) => {
         console.log(res);
       })
