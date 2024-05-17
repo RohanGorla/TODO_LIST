@@ -17,7 +17,7 @@ function App() {
         .then((response) => {
           console.log(response.data);
           response.data.forEach((td) => {
-            if (td.done == "yes") {
+            if (td.done == "no") {
               setDone(true);
             } else{
               setDone(false);
