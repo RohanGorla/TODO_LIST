@@ -54,7 +54,7 @@ function App() {
 
   async function addTodo(e) {
     e.preventDefault();
-    axios
+    await axios
       .post("https://todo-server-phi-teal.vercel.app/add", {
         todo_title: title,
         todo_content: content,
@@ -71,7 +71,7 @@ function App() {
   }
 
   async function finishTodo(id) {
-    axios
+    await axios
       .post("https://todo-server-phi-teal.vercel.app/done", {
         todo_id: id,
       })
@@ -85,7 +85,7 @@ function App() {
   }
 
   async function undoTodo(id) {
-    axios
+    await axios
       .post("https://todo-server-phi-teal.vercel.app/undo", { todo_id: id })
       .then((res) => {
         console.log(res);
@@ -97,7 +97,7 @@ function App() {
   }
 
   async function deleteTodo(id) {
-    axios
+    await axios
       .delete("https://todo-server-phi-teal.vercel.app/delete", {
         data: { id },
       })
