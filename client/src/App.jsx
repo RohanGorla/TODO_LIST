@@ -5,6 +5,7 @@ import axios from "axios";
 function App() {
   const [renderAdd, setRenderAdd] = useState(false);
   const [done, setDone] = useState(false);
+  const [none, setNone] = useState(false);
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -20,6 +21,11 @@ function App() {
               setDone(true);
             } else{
               setDone(false);
+            }
+            if (td.done == 'no') {
+              setNone(false);
+            } else {
+              setNone(true);
             }
           });
           setTodos(response.data);
@@ -48,7 +54,7 @@ function App() {
 
   async function addTodo(e) {
     e.preventDefault();
-    await axios
+    axios
       .post("https://todo-server-phi-teal.vercel.app/add", {
         todo_title: title,
         todo_content: content,
@@ -65,7 +71,7 @@ function App() {
   }
 
   async function finishTodo(id) {
-    await axios
+    axios
       .post("https://todo-server-phi-teal.vercel.app/done", {
         todo_id: id,
       })
@@ -79,7 +85,7 @@ function App() {
   }
 
   async function undoTodo(id) {
-    await axios
+    axios
       .post("https://todo-server-phi-teal.vercel.app/undo", { todo_id: id })
       .then((res) => {
         console.log(res);
@@ -91,7 +97,7 @@ function App() {
   }
 
   async function deleteTodo(id) {
-    await axios
+    axios
       .delete("https://todo-server-phi-teal.vercel.app/delete", {
         data: { id },
       })
@@ -130,7 +136,7 @@ function App() {
         ></input>
         <button type="submit">ADD</button>
       </form>
-      <h2>{todos.length ? "TODOS:" : "YOU HAVE NOTHING-TODO"}</h2>
+      <h2>{none ? "TODOS:" : "YOU HAVE NOTHING-TODO"}</h2>
       <div className="todos">
         {todos.map((todo) => {
           return todo.done == "no" ? (
